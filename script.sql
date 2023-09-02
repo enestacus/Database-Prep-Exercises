@@ -91,7 +91,7 @@ VALUES
     (26, 'Let is cook for 1'),
     (27, 'Remove pan from fire');
 
-
+/*
 CREATE TABLE recipe_category (
     id INT PRIMARY KEY,
     recipe_id INT,
@@ -99,6 +99,16 @@ CREATE TABLE recipe_category (
     FOREIGN KEY (recipe_id) REFERENCES recipe(id),
     FOREIGN KEY (category_id) REFERENCES category(id)
 );
+*/
+
+CREATE TABLE recipe_category (
+    recipe_id INT,
+    category_id INT,
+    PRIMARY KEY (recipe_id, category_id),
+    FOREIGN KEY (recipe_id) REFERENCES recipe(id),
+    FOREIGN KEY (category_id) REFERENCES category(id)
+);
+
 
 INSERT INTO recipe_category (id, recipe_id, category_id)
 VALUES
@@ -111,11 +121,20 @@ VALUES
     (7, 4, 3),
     (8, 4, 6);
 
-
+/*
 CREATE TABLE recipe_ingredient (
     id INT PRIMARY KEY,
     recipe_id INT,
     ingredient_id INT,
+    FOREIGN KEY (recipe_id) REFERENCES recipe(id),
+    FOREIGN KEY (ingredient_id) REFERENCES ingredient(id)
+);
+*/
+
+CREATE TABLE recipe_ingredient (
+    recipe_id INT,
+    ingredient_id INT,
+    PRIMARY KEY (recipe_id, ingredient_id),
     FOREIGN KEY (recipe_id) REFERENCES recipe(id),
     FOREIGN KEY (ingredient_id) REFERENCES ingredient(id)
 );
@@ -147,11 +166,20 @@ VALUES
     (23, 4, 21),
     (24, 4, 10);
 
-
+/*
 CREATE TABLE recipe_step (
     id INT PRIMARY KEY,
     recipe_id INT,
     step_id INT,
+    FOREIGN KEY (recipe_id) REFERENCES recipe(id),
+    FOREIGN KEY (step_id) REFERENCES step(id)
+);
+*/
+
+CREATE TABLE recipe_step (
+    recipe_id INT,
+    step_id INT,
+    PRIMARY KEY (recipe_id, step_id),
     FOREIGN KEY (recipe_id) REFERENCES recipe(id),
     FOREIGN KEY (step_id) REFERENCES step(id)
 );
@@ -200,3 +228,9 @@ FROM recipe r
 JOIN recipe_category rc ON r.id = rc.recipe_id
 JOIN category c ON rc.category_id = c.id
 WHERE c.category_name = 'Vegan' OR c.category_name = 'Japanese';
+
+/*
+-My database was already in 2NF because it is already in 1NF which means every column contains only 1 value and all columns are dependent on the primary key.
+
+-My database was not in 3NF because some of my tables were containing transitive dependencies. There were columns apart from the key ones dependent on each other. In order to figure that out I refactored the codes of relevant tables as above. 
+*/
